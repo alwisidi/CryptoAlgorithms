@@ -1,3 +1,6 @@
+import enchant
+d = enchant.Dict("en_US")
+
 def encrypt(src_text, key):
 	cipher_text = ''
 	for i in range(len(src_text)):
@@ -19,14 +22,26 @@ def decrypt(cipher_text, key):
 	return src_text
 
 def break_cipher(cipher_text):
-	src_text = [''] * 25
+	class src_text:
+		idx = 0
+		arr = [''] * 25
+	count = [0, 0]
 	for i in range(25):
 		for j in range(len(cipher_text)):
 			char = cipher_text[j].upper()
 			if(ord(char) >= 65 and ord(char) <= 90):
-				src_text[i] += chr((ord(char) - (i + 1) - 65) % 26 + 65)
+				src_text.arr[i] += chr((ord(char) - (i + 1) - 65) % 26 + 65)
 			else:
-				src_text[i] += char
+				src_text.arr[i] += char
+		check_text = src_text.arr[i].split()
+		src_text.arr[i] = str(i + 1) + " => " + src_text.arr[i]
+		count[1] = 0
+		for k in range(len(check_text)):
+			if(d.check(check_text[k])):
+				count[1] += 1
+		if(count[1] > count[0]):
+			src_text.idx = i
+			count[0] = count[1]
 	return src_text
 
 text = input('Please type your message: ')
@@ -45,7 +60,7 @@ while True:
 if(op != 3):
 	key = input('Please type the \'SHIFT KEY\': ')
 	key = int(key)
-	print('\n\nKey: ' + str(key))
+	print('\nKey: ' + str(key))
 
 if(op == 1):
 	print('Source text: ' + text)
@@ -57,4 +72,5 @@ if(op == 2):
 if(op == 3):
 	list = break_cipher(text)
 	print('Cipher text: ' + text)
-	print('Source text possibilities:\n' + '\n'.join(list))
+	print('Source text possibilities:\n' + '\n'.join(list.arr))
+	print("\nThe correct decrypted text:\n" + list.arr[list.idx])
