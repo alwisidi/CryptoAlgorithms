@@ -1,6 +1,7 @@
 import enchant
 d = enchant.Dict("en_US")
 
+
 def encrypt(src_text, key):
 	cipher_text = ''
 	for i in range(len(src_text)):
